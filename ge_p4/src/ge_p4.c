@@ -11,10 +11,6 @@
 #define C 3.6//時速から秒速に変化するときに使用
 #define SC 5//表示の際の倍率
 
-
-// #define D 5    //桁の数
-#define K 10   //1桁の数値の範囲
-
 // void init();//初期化
 void display(int speed,int distance,int breaks);//表示
 int speed_find(int speed,int breaks);//速度を求める
@@ -50,10 +46,15 @@ int main(void){
             breaks += breaks_find(breaks);//ブレーキの操作
             after_speed=speed;//ブレーキを踏む前のスピード
             speed = speed_find(speed,breaks);//速度の計算
-            distance = distance_find(ave_speed(after_speed,speed),distance);//距離の計算
+//            if(speed<breaks){speed=0;};
+//            if(ave_speed(after_speed,speed)<0){break;}//平均速度がマイナスになった場合ゲーム終了
+//            distance = distance_find(ave_speed(after_speed,speed),distance);//距離の計算
+            distance = distance_find(speed,distance);//距離の計算
             seconds++;//時間を進める
             if(distance<-10) break;//駅を通り越した
         }while (0<speed);
+        printf("ループを抜けました。");
+        fflush(stdout);
         display(speed,distance,breaks);//表示
         display_end(seconds,distance);//ゲーム終了の表示
         f_end=game_continue();//ゲームを続けるかどうか
@@ -69,11 +70,18 @@ void display(int speed,int distance,int breaks){//表示
         printf("[停止中]\n");
     }else printf("[走行中]\n");
     printf("|");
-    for(i=0;i<D/SC;i++){
-        if(i==train){
-            printf("□□□");
-            i += 2;
-        }else printf("_");
+    if(distance<=0){
+    	printf("□□");
+    	for(i=0;i<D/SC;i++){
+    	        printf("_");
+    	    }
+    }else{
+		for(i=0;i<D/SC;i++){
+			if(i==train){
+				printf("□□□");
+				i += 2;
+			}else printf("_");
+		}
     }
     printf("\n速度：%dkm/h 距離：%dm ブレーキ：%d (max%d)\n",speed,distance,breaks,BMAX);
 }
