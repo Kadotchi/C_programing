@@ -26,7 +26,6 @@
 
 // void init();//初期化
 void Rule();//ルール説明
-void display(int speed,int distance,int breaks);//表示
 int speed_find(int speed,int breaks);//速度を求める
 int distance_find(int speed,int distance);//距離を求める
 int breaks_find(int breaks);//ブレーキの操作
@@ -81,22 +80,6 @@ int main(void){
 
 }
 
-void display(int speed,int distance,int breaks){//表示
-    int i;//ループ制御
-    int train;
-    train=distance/SC;
-    if(speed==0||distance<-10){
-        printf("[停止中]\n");
-    }else printf("[走行中]\n");
-    printf("|");
-    for(i=0;i<D/SC;i++){
-        if(i==train){
-            printf("□□□");
-            i += 2;
-        }else printf("_");
-    }
-    printf("\n速度：%dkm/h 距離：%dm ブレーキ：%d (max%d)\n",speed,distance,breaks,BMAX);
-}
 
 int breaks_find(int breaks){//ブレーキの操作
     int flag;//ブレーキをどうするの判断；
@@ -133,16 +116,9 @@ int Input_Rece(int max_num,int min_num,int digit){//数値の入力
 	int flag;    //繰り返しカウンタ
 	int len;          //入力データサイズ
 	//int digit;        //数字変換
-	int num_check[K]; //使われた数字の記憶
 	int num;          //入力された数値
-	int num_dis[digit];   //入力された数値を桁ごとに代入。
-	int dis;          //桁ごとに数値を入れるときに使用
 
 	while (1) {
-		/*num_checkの初期化*/
-		for (i = 0; i < K; i++) {
-			num_check[i] = 0;
-		}
 		flag = 0; //フラグの初期化
 		printf("\n0から%dまでの数字を入力してください。：", max_num);
 		fflush(stdout);
@@ -155,21 +131,12 @@ int Input_Rece(int max_num,int min_num,int digit){//数値の入力
 		    str[len] = '\0';
         }
 
-		// for (i = 0; i < len; i++) {
-		// 	printf("str[%d]:%c\n", i, str[i]);
-		// 	fflush(stdout);
-		// }
 
 		if (digit + 1 < len) {
 			printf(">>ERROR:%d桁を超えています。もう一度入力してください。\n", digit);
 			fflush(stdout);
 			continue;
 		}
-        // else if (len < digit + 1) {
-		// 	printf(">>EROOR:%d桁に達していません。もう一度入力してください。\n", digit);
-		// 	fflush(stdout);
-		// 	continue;
-		// }
 
 		//入力の数値に文字が入力されてた場合
 		for (i = 0; i < len-1; i++) //データサイズ文取得
@@ -188,19 +155,6 @@ int Input_Rece(int max_num,int min_num,int digit){//数値の入力
 		num = atoi(&str[0]);
 		printf("入力された数値：%d\n", num);
 		fflush(stdout);
-		// for (i = 0; i < digit; i++) {
-		// 	dis = pow(10, (digit - i - 1));
-		// 	num_dis[i] = num / dis;
-		// 	num = num % dis;
-		// 	fflush(stdout);
-		// }
-
-		// if (num_dis[0] == 0) {
-		// 	printf(">>ERROR:先頭の数字が０または文字になっています。\n");
-		// 	fflush(stdout);
-		// 	continue;
-		// }
-
         if(num>max_num){
             printf(">>ERROR:上限を超えています。\n");
             continue;
@@ -211,17 +165,6 @@ int Input_Rece(int max_num,int min_num,int digit){//数値の入力
             continue;
         }
 
-		// for (i = 0; i < len - 1; i++) //データサイズ文取得
-		// 		{
-		// 	if (num_check[num_dis[i]] == 0) {
-		// 		num_check[num_dis[i]] = 1;
-		// 	} else {
-		// 		printf(">>ERROR:同じ数字が2回以上使われています。もう一度入力してください。\n");
-		// 		fflush(stdout);
-		// 		flag = 1;
-		// 		break;
-		// 	}
-		// }
 		if (flag)
 			continue;
 		break;
@@ -246,16 +189,9 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
 	int flag;    //繰り返しカウンタ
 	int len;          //入力データサイズ
 	//int digit;        //数字変換
-	int num_check[K]; //使われた数字の記憶
 	int num;          //入力された数値
-	int num_dis[digit];   //入力された数値を桁ごとに代入。
-	int dis;          //桁ごとに数値を入れるときに使用
 
 	while (1) {
-		/*num_checkの初期化*/
-		for (i = 0; i < K; i++) {
-			num_check[i] = 0;
-		}
 		flag = 0; //フラグの初期化
 		// printf("\n0から%dまでの数字を入力してください。：", max_num);
 		fflush(stdout);
@@ -268,11 +204,6 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
 		    str[len] = '\0';
         }
 
-        /* 変数確認 */
-		// for (i = 0; i < len; i++) {
-		// 	printf("str[%d]:%c\n", i, str[i]);
-		// 	fflush(stdout);
-		// }
 
 		if (digit + 1 < len) {
 			printf(">>ERROR:%d桁を超えています。もう一度入力してください。\n", digit);
@@ -280,11 +211,6 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
             return 0;
 			// continue;
 		}
-        // else if (len < digit + 1) {
-		// 	printf(">>EROOR:%d桁に達していません。もう一度入力してください。\n", digit);
-		// 	fflush(stdout);
-		// 	continue;
-		// }
 
 		//入力の数値に文字が入力されてた場合
 		for (i = 0; i < len-1; i++) //データサイズ文取得
@@ -304,18 +230,6 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
 		num = atoi(&str[0]);
 		// printf("入力された数値：%d\n", num);
 		fflush(stdout);
-		// for (i = 0; i < digit; i++) {
-		// 	dis = pow(10, (digit - i - 1));
-		// 	num_dis[i] = num / dis;
-		// 	num = num % dis;
-		// 	fflush(stdout);
-		// }
-
-		// if (num_dis[0] == 0) {
-		// 	printf(">>ERROR:先頭の数字が０または文字になっています。\n");
-		// 	fflush(stdout);
-		// 	continue;
-		// }
 
         if(num>max_num){
             printf(">>ERROR:上限を超えています。\n");
@@ -329,17 +243,6 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
             // continue;
         }
 
-		// for (i = 0; i < len - 1; i++) //データサイズ文取得
-		// 		{
-		// 	if (num_check[num_dis[i]] == 0) {
-		// 		num_check[num_dis[i]] = 1;
-		// 	} else {
-		// 		printf(">>ERROR:同じ数字が2回以上使われています。もう一度入力してください。\n");
-		// 		fflush(stdout);
-		// 		flag = 1;
-		// 		break;
-		// 	}
-		// }
 		if (flag)
 			continue;
 		break;
@@ -350,16 +253,6 @@ int Input_Rece_ver2(int max_num,int min_num,int digit){//数値の入力
 
 }
 
-// int speed_find(int speed,int breaks){//速度を求める
-//     int next_speed;
-//     next_speed=speed-breaks;
-//     return next_speed;
-// }
-// int month_distance_find(int speed,int distance){//距離を求める
-//     int next_distance;
-//     next_distance=distance-(speed/C);
-//     return next_distance;
-// }
 
 void month_display(int speed,int distance,int breaks){//表示
     int i;//ループ制御
