@@ -100,7 +100,7 @@ void card_deck(struct playing_cards *trump){
 	int i,j;//ループ制御
 //	int num[T];//トランプのネクストを与える時に使用
 	char mark_dis[M][BUF]={"スペード","ハート","クラブ","ダイヤ"};
-	char num_dis[V][BUF]={"2","3","4","5","6","7","8","9","10","J","Q","K","A"};
+	char num_dis[V][3]={"2","3","4","5","6","7","8","9","10","J","Q","K","A"};
 	for(i=0;i<M;i++){
 		for(j=0;j<V;j++){
 			strcpy((trump+(i*V+j))->mark,mark_dis[i]);//マークの代入
