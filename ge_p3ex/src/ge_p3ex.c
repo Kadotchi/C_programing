@@ -10,6 +10,7 @@
 #define M 4 //トランプのマークの種類
 #define MO 100//所持金
 #define BUF 255//文字のバッファ
+#define MAX_MO 1000//クリア条件所持金
 
 
 struct playing_cards{
@@ -85,9 +86,9 @@ int main(void){
 			}
 
 
-		}while(0<money && money<=MO);
+		}while(0<money && money<=MAX_MO);
 		if(MO<money){
-			printf("所持金が%dで$%dを超えました。\n",money,MO);
+			printf("所持金が%dで$%dを超えました。\n",money,MAX_MO);
 		}else{
 			printf("所持金が0になりました。\n");
 		}
