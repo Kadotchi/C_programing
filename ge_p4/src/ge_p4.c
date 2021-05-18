@@ -24,11 +24,13 @@ void display_end(int time,int distance);//ゲーム終了時の表示
 int Input_Rece(int max_num,int min_num,int digit);//数値の入力
 int game_continue();//ゲームを続けるかの選択
 int Input_Rece_0(int max_num,int min_num,int digit);//数値の入力
+int ave_speed(int speed,int next_speed);//平均速度の計算
 void Rule();//ルール説明
 
 
 int main(void){
     int speed;//速度
+    int after_speed;//ブレーキを踏む前にスピード
     int distance;//距離
     int breaks;//ブレーキ
     int seconds;//時間
@@ -46,8 +48,9 @@ int main(void){
         do{
             display(speed,distance,breaks);//表示
             breaks += breaks_find(breaks);//ブレーキの操作
+            after_speed=speed;//ブレーキを踏む前のスピード
             speed = speed_find(speed,breaks);//速度の計算
-            distance = distance_find(speed,distance);//距離の計算
+            distance = distance_find(ave_speed(after_speed,speed),distance);//距離の計算
             seconds++;//時間を進める
             if(distance<-10) break;//駅を通り越した
         }while (0<speed);
@@ -253,4 +256,16 @@ int Input_Rece_0(int max_num,int min_num,int digit){//数値の入力
 	}
 	fclose(fp);
 	printf("\n");
+}
+
+//平均速度の計算
+int ave_speed(int speed,int next_speed){
+	int sum;
+	int after_time,next_time;
+	sum=speed*next_speed;
+	after_time = sum /speed;
+	next_time = sum/next_speed;
+
+	return (sum*2)/(after_time+next_time);
+
 }
