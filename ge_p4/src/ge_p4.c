@@ -14,7 +14,8 @@
 // void init();//初期化
 void display(int speed,int distance,int breaks);//表示
 int speed_find(int speed,int breaks);//速度を求める
-int distance_find(int speed,int distance);//距離を求める
+//int distance_find(int speed,int distance);//距離を求める
+int distance_find(int first_speed,int end_speed,int distance);//距離を求める
 int breaks_find(int breaks);//ブレーキの操作
 void display_end(int time,int distance);//ゲーム終了時の表示
 int Input_Rece(int max_num,int min_num,int digit);//数値の入力
@@ -49,7 +50,7 @@ int main(void){
 //            if(speed<breaks){speed=0;};
 //            if(ave_speed(after_speed,speed)<0){break;}//平均速度がマイナスになった場合ゲーム終了
 //            distance = distance_find(ave_speed(after_speed,speed),distance);//距離の計算
-            distance = distance_find(speed,distance);//距離の計算
+            distance = distance_find(after_speed,speed,distance);//距離の計算
             seconds++;//時間を進める
             if(distance<-10) break;//駅を通り越した
         }while (0<speed);
@@ -105,10 +106,18 @@ int speed_find(int speed,int breaks){//速度を求める
     next_speed=speed-breaks;
     return next_speed;
 }
-int distance_find(int speed,int distance){//距離を求める
-    int next_distance;
-    next_distance=distance-(speed/C);
-    return next_distance;
+//int distance_find(int speed,int distance){//距離を求める
+//    int next_distance;
+//    next_distance=distance-(speed/C);
+//    return next_distance;
+//}
+
+int distance_find(int first_speed,int end_speed ,int distance){//距離を求める
+	int a_speed;//加速度
+	int next_distance;
+	a_speed=end_speed-first_speed;//加速度の計算
+	next_distance=distance-(first_speed/C+a_speed/2/C);
+	return next_distance;
 }
 
 
