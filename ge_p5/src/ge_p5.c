@@ -11,10 +11,9 @@
 // void init();//初期化
 extern void Rule();//ルール説明
 extern int game_continue();//ゲームを続けるかの選択
-extern int Input_Rece(int max_num,int min_num,int mode);//数値の入力 modoが0の時は不正な入力は0を返す
 
 /* 月面着陸ゲーム */
-extern void month_display(struct ship *landing_ship);//表示s
+extern void month_display(struct ship *landing_ship);//表示
 extern void landing(struct ship *landing_ship);//着陸船の操作
 
 

@@ -6,13 +6,11 @@
 #include "ship.h"
 #include "constant.h"
 
-extern int Input_Rece(int max_num,int min_num,int mode);//数値の入力 modoが0の時は不正な入力は0を返す
-
 void month_display(struct ship *landing_ship){//表示
     int i;//ループ制御
     int train;
     train=landing_ship->altitude/DISPLAY_MAFNIFICATION;
-    if(landing_ship->speed==0||landing_ship->altitude<-10){
+    if(landing_ship->speed==0||landing_ship->altitude<=0){
         printf("[停止中]\n");
     }else printf("[走行中]\n");
     printf("|");
@@ -34,9 +32,9 @@ void month_display(struct ship *landing_ship){//表示
     //月面着陸していた場合
     if(landing_ship->f_landing==0){
     	if(landing_ship->speed<CLEAR_SPEED){
-    		printf("月面着陸成功！！");
+    		printf("月面着陸成功！！\n");
     	}else{
-    		printf("月面着陸失敗");
+    		printf("月面着陸失敗\n");
     	}
     }
 }
