@@ -48,7 +48,7 @@ int main(void){
             distance = distance_find(after_speed,speed,distance);//距離の計算
             seconds++;//時間を進める
             if(distance<-10) break;//駅を通り越した
-        }while (0<speed || distance>=-10);
+        }while (0<speed);
         printf("ループを抜けました。");
         fflush(stdout);
         display(speed,distance,breaks);//表示
