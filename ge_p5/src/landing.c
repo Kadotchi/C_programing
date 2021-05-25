@@ -1,8 +1,4 @@
 #include<stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
 #include "ship.h"
 #include "constant.h"
 
@@ -31,6 +27,7 @@ void landing(struct ship *landing_ship){
 	acceleration=landing_ship->speed-before_speed;
 	//高度の変化の計算
 	landing_ship->altitude -=before_speed+acceleration/2;
+	if(landing_ship->altitude<0) landing_ship->altitude=0;
 	//着陸船の時間を進める
 	landing_ship->time ++;
 	//月面着陸した場合フラグを０にする

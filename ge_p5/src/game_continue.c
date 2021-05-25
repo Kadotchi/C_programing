@@ -1,10 +1,4 @@
 #include<stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <math.h>
-#include "ship.h"
-#include "constant.h"
 
 extern int Input_Rece(int max_num,int min_num,int mode);//数値の入力 modoが0の時は不正な入力は0を返す
 
