@@ -25,7 +25,6 @@ int main(void) {
 	char Astr[5]="Yes";//ゲームを続けるための比較対象
 
 	Description();//問題の説明
-
 	while (strcmp(Ustr,Astr)==0){
 
 		Init(&Correct_Number,&Count);//初期化
