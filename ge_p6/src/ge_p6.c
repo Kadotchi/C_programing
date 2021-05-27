@@ -35,7 +35,7 @@ int main(void){
 		//式の入力
 		fflush(0);
 		fgets(inverse_poland,sizeof(inverse_poland),stdin) ;
-		printf("文字数:%lu\n",(long unsigned int)strlen(inverse_poland));
+		//printf("文字数:%lu\n",(long unsigned int)strlen(inverse_poland));
 		if(strlen(inverse_poland)==1){
 			printf("不正な入力です\n");
 			printf("スタックを初期化します\n");
@@ -55,39 +55,42 @@ int main(void){
 					return 0 ;
 				}else if(strcmp(tmp,"C")==0){
 					printf("Cを入力されたのでスタックを初期化します\n");
+					fflush(stdin);
 					stack_init(&five);
+					continue;
 				}else{
-					printf("ENDではない。\n");
+					//printf("ENDではない。\n");
 
 				}
 				if(tmp==NULL){
-					printf("end\n");//式の終端にいった場合
+					//printf("end\n");//式の終端にいった場合
 					break;
 				}
 			}
 			else{
 				tmp = strtok(NULL," ");//文字列の2つ目以降
 				if(tmp==NULL){
-					printf("end\n");//式の終端にいった場合
+					//printf("end\n");//式の終端にいった場合
 					break;
 				}
 			}
 
 			//数値変換
 			num=strtoll(tmp,&endp,10);
-			if(num<=LLONG_MIN||LLONG_MAX<=num){
+			//if(num<LLONG_MIN||LLONG_MAX<num){
+			if(errno==ERANGE){
 				printf("数値が許容範囲を超えています。\n");
 				printf("スタックを初期化します\n");
 				stack_init(&five);
 				break;
 			}else{
-				printf("正常な数値です。\n");
+				//printf("正常な数値です。\n");
 			}
 
 
 
 			//文字列を数字に変換
-			printf("tmpの状態：%s 変換後：%d \n",tmp,(int)num);//文字列を数値変換
+			//printf("tmpの状態：%s 変換後：%d \n",tmp,(int)num);//文字列を数値変換
 
 
 			//数字か判断
@@ -112,31 +115,33 @@ int main(void){
 						printf("スタックが足りません\n");
 						break;
 					}else{
-						printf("スタックが足りています。\n");
+						//printf("スタックが足りています。\n");
 					}
 
 					if(*tmp=='+'){
 						printf("足し算します。\n");
 						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
-						if(num_tmp1>LLONG_MAX-num_tmp2){
+						if(num_tmp1>LLONG_MAX-num_tmp2||num_tmp1>LLONG_MIN-num_tmp2){
 							printf("計算がオーバーフローします。\n");
 							printf("スタックを初期化します\n");
 							stack_init(&five);
+							break;
 						}else{
-							printf("正常な計算結果です。\n");
+							//printf("正常な計算結果です。\n");
 						}
 						push(num_tmp1+num_tmp2,&five);
 					}else if(*tmp=='-'){
-						printf("引き算します。'\n");
+						printf("引き算します。\n");
 						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
-						if(num_tmp1<LLONG_MIN-num_tmp2){
+						if(num_tmp2<LLONG_MIN-num_tmp1||num_tmp2<LLONG_MAX-num_tmp1){
 							printf("計算がオーバーフローします。\n");
 							printf("スタックを初期化します\n");
 							stack_init(&five);
+							break;
 						}else{
-							printf("正常な計算結果です\n");
+							//printf("正常な計算結果です\n");
 						}
 
 						push(num_tmp1-num_tmp2,&five);
@@ -144,10 +149,11 @@ int main(void){
 						printf("掛け算します。\n");
 						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
-						if(num_tmp1>LLONG_MAX/num_tmp2){
+						if(num_tmp1>LLONG_MAX/num_tmp2||num_tmp1>LLONG_MIN/num_tmp2){
 							printf("計算がオーバーフローします。\n");
 							printf("スタックを初期化します\n");
 							stack_init(&five);
+							break;
 						}
 
 						push(num_tmp1*num_tmp2,&five);
@@ -155,11 +161,18 @@ int main(void){
 						printf("割り算します。\n");
 						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
+						if(num_tmp1==0||num_tmp2==0){
+							printf("0での除算はできません。\n");
+							printf("スタックを初期化します\n");
+							stack_init(&five);
+							break;
+						}
 						push((double)num_tmp1/(double)num_tmp2+0.5,&five);
 					}else{
 						printf("不正な入力です\n");
 						printf("スタックを初期化します\n");
 						stack_init(&five);
+						break;
 					}
 				}else{
 					printf("不正な入力です。\n");
@@ -171,9 +184,7 @@ int main(void){
 			fflush(stdout);
 			fflush(stdin);
 		}
-		puts("1ループを抜けました");
+		//puts("1ループを抜けました");
 		fflush(stdout);
 	}
-	puts("2ループを抜けました");
-	fflush(stdout);
 }

@@ -13,7 +13,7 @@ void push(long long num,struct stack *five){
     //     exit;
     // }
     five->value[five->head]=num;
-    printf("スタック[%d]に%dをpush\n",five->head,(int)five->value[five->head]);
+    printf("スタック[%d]に%lldをpush\n",five->head,five->value[five->head]);
     five->head++;
 }
 

@@ -11,6 +11,6 @@
 void stack_display(struct stack *five){
 	int i;
 	for(i=0;i<five->head;i++){
-		printf("stack[%d]:%d\n",i,(int)five->value[i]);
+		printf("stack[%d]:%lld\n",i,five->value[i]);
 	}
 }
