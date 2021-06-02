@@ -8,7 +8,7 @@
 
 
 extern void push(long long num,struct stack *five);//スタックに数値を格納
-extern int pop(struct stack *five);//スタックから数字を取出す
+extern long long int pop(struct stack *five);//スタックから数字を取出す
 extern void stack_display(struct stack *five);//スタックの表示
 extern void stack_init(struct stack *five);//スタックの初期化
 
@@ -23,6 +23,9 @@ int main(void){
     long long int num_tmp2;
 
 	stack_init(&five);
+	printf("%lld\n",LLONG_MAX);
+	printf("%lld\n",LLONG_MIN);
+//	puts(LLONG_MIN);
 	while(1) {
 
 		//初期化
@@ -82,6 +85,7 @@ int main(void){
 				printf("数値が許容範囲を超えています。\n");
 				printf("スタックを初期化します\n");
 				stack_init(&five);
+				errno=0;
 				break;
 			}else{
 				//printf("正常な数値です。\n");
@@ -107,67 +111,135 @@ int main(void){
 				}
 				fflush(stdout);
 			}else{
-				printf("文字が混入\n");
-				printf("文字数：%lu\n",(long unsigned int)strlen(tmp));
+//				printf("文字が混入\n");
+//				printf("文字数：%lu\n",(long unsigned int)strlen(tmp));
 				if(strlen(tmp)==1){
-					//スタックが2以上あるか確認
-					if(five.head<2){
-						printf("スタックが足りません\n");
-						break;
-					}else{
-						//printf("スタックが足りています。\n");
-					}
 
 					if(*tmp=='+'){
-						printf("足し算します。\n");
-						num_tmp1=pop(&five);
-						num_tmp2=pop(&five);
-						if(num_tmp1>LLONG_MAX-num_tmp2||num_tmp1>LLONG_MIN-num_tmp2){
-							printf("計算がオーバーフローします。\n");
-							printf("スタックを初期化します\n");
-							stack_init(&five);
+						//スタックが2以上あるか確認
+						if(five.head<2){
+							printf("スタックが足りません\n");
 							break;
-						}else{
-							//printf("正常な計算結果です。\n");
+						}
+
+						printf("足し算します。\n");
+						num_tmp2=pop(&five);
+						num_tmp1=pop(&five);
+						if(num_tmp2>0){//右辺が正の値の時
+							if(num_tmp1>LLONG_MAX-num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}else if((num_tmp1<0)&&(num_tmp2<0)) {
+							if(num_tmp1< LLONG_MIN-num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
 						}
 						push(num_tmp1+num_tmp2,&five);
 					}else if(*tmp=='-'){
-						printf("引き算します。\n");
-						num_tmp1=pop(&five);
-						num_tmp2=pop(&five);
-						if(num_tmp2<LLONG_MIN-num_tmp1||num_tmp2<LLONG_MAX-num_tmp1){
-							printf("計算がオーバーフローします。\n");
-							printf("スタックを初期化します\n");
-							stack_init(&five);
+						//スタックが2以上あるか確認
+						if(five.head<2){
+							printf("スタックが足りません\n");
 							break;
-						}else{
-							//printf("正常な計算結果です\n");
+						}
+
+						printf("引き算します。\n");
+						num_tmp2=pop(&five);
+						num_tmp1=pop(&five);
+						if((num_tmp1>0)&&(num_tmp2<0)){//右辺が正の値の時
+							if(num_tmp1>LLONG_MAX+num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}else if((num_tmp1<0)&&(num_tmp2>0)) {
+							if(num_tmp1< LLONG_MIN+num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
 						}
 
 						push(num_tmp1-num_tmp2,&five);
 					}else if(*tmp=='*'){
+						//スタックが2以上あるか確認
+						if(five.head<2){
+							printf("スタックが足りません\n");
+							break;
+						}
+
 						printf("掛け算します。\n");
-						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
-						if(num_tmp1>LLONG_MAX/num_tmp2||num_tmp1>LLONG_MIN/num_tmp2){
+						num_tmp1=pop(&five);
+						if((num_tmp1==LLONG_MIN&&num_tmp2==-1)||(num_tmp1==-1||num_tmp2==LLONG_MIN)){
 							printf("計算がオーバーフローします。\n");
 							printf("スタックを初期化します\n");
 							stack_init(&five);
 							break;
 						}
+						if(((num_tmp1>0)&&(num_tmp2<0))){
+							if(num_tmp1>LLONG_MIN/num_tmp2){
+								printf("計算がアンダーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}else if(((num_tmp1<0)&&(num_tmp2>0))){
+							if(num_tmp1<LLONG_MIN/num_tmp2){
+								printf("計算がアンダーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}else if(((num_tmp1>0)&&(num_tmp2>0))){
+							if(num_tmp1>LLONG_MAX/num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}else if(((num_tmp1<0)&&(num_tmp2<0))){
+							if(num_tmp1<LLONG_MAX/num_tmp2){
+								printf("計算がオーバーフローします。\n");
+								printf("スタックを初期化します\n");
+								stack_init(&five);
+								break;
+							}
+						}
 
 						push(num_tmp1*num_tmp2,&five);
 					}else if(*tmp=='/'){
+						//スタックが2以上あるか確認
+						if(five.head<2){
+							printf("スタックが足りません\n");
+							break;
+						}
+
 						printf("割り算します。\n");
-						num_tmp1=pop(&five);
 						num_tmp2=pop(&five);
+						num_tmp1=pop(&five);
 						if(num_tmp1==0||num_tmp2==0){
 							printf("0での除算はできません。\n");
 							printf("スタックを初期化します\n");
 							stack_init(&five);
 							break;
 						}
-						push((double)num_tmp1/(double)num_tmp2+0.5,&five);
+
+						//オーバーフロー対策
+						if((num_tmp1==LLONG_MIN&&num_tmp2==-1)||(num_tmp1==-1||num_tmp2==LLONG_MIN)){
+							printf("計算がオーバーフローします。\n");
+							printf("スタックを初期化します\n");
+							stack_init(&five);
+							break;
+						}
+						push(num_tmp1/num_tmp2,&five);
 					}else{
 						printf("不正な入力です\n");
 						printf("スタックを初期化します\n");
@@ -178,9 +250,10 @@ int main(void){
 					printf("不正な入力です。\n");
 					printf("スタックを初期化します\n");
 					stack_init(&five);
+					break;
 				}
 			}
-			puts("ループを抜けました");
+			//puts("ループを抜けました");
 			fflush(stdout);
 			fflush(stdin);
 		}
